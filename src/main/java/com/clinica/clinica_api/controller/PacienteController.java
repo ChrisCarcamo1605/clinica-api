@@ -37,4 +37,22 @@ public class PacienteController {
         return pacienteService.guardarPaciente(paciente);
     }
 
+    @PatchMapping("/{id}")
+    public Paciente actualizarParcialPaciente(@RequestBody Paciente paciente, @PathVariable Long id){
+        return pacienteService.actualizarParcialPaciente(id, paciente);
+    }
+
+    @PutMapping("/{id}")
+    public Paciente actualizarPaciente(@RequestBody Paciente paciente, @PathVariable Long id){
+        return pacienteService.actualizarPaciente(id, paciente);
+
+    }
+
+    //Se me oye?
+
+    @DeleteMapping("/{id}")
+    public void borrarPaciente(@PathVariable Long id){
+         pacienteService.borrarPaciente(id);
+    }
+
 }
