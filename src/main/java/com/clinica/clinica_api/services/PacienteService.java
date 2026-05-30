@@ -1,5 +1,6 @@
 package com.clinica.clinica_api.services;
 
+import com.clinica.clinica_api.dtos.SavePacienteDTO;
 import com.clinica.clinica_api.entities.Paciente;
 import org.springframework.stereotype.Service;
 
@@ -13,15 +14,24 @@ public class PacienteService {
     private Long idAutoIncremental = 1L;
 
     public PacienteService() {
-        listaPacientes.add(new Paciente(idAutoIncremental++, "Carlos", "Mendoza", "Gripe aviar"));
-        listaPacientes.add((new Paciente(idAutoIncremental++, "Ana", "Gomez", "Cancer de pelo")));
+        listaPacientes.add(new Paciente(idAutoIncremental++, "Carlos", "Mendoza", "Gripe aviar", 15));
+        listaPacientes.add((new Paciente(idAutoIncremental++, "Ana", "Gomez", "Cancer de pelo",36)));
     }
 
     public List<Paciente> obtenerTodos() {
         return listaPacientes;
     }
 
-    public Paciente guardarPaciente(Paciente paciente) {
+    public Paciente guardarPaciente(SavePacienteDTO pacienteDto) {
+
+        Paciente paciente = Paciente.builder()
+                .id(idAutoIncremental++)
+                .apellido(pacienteDto.apellido())
+                .edad(pacienteDto.edad())
+                .nombre(pacienteDto.nombre())
+                .diagnostico(pacienteDto.diagnostico())
+                .build();
+
         paciente.setId(idAutoIncremental);
         listaPacientes.add(paciente);
         return paciente;
@@ -66,30 +76,30 @@ public class PacienteService {
         Paciente pacienteAActualizar = buscarPaciente(id);
         int indice = listaPacientes.indexOf(pacienteAActualizar);
 
-            if (pacienteAActualizar != null) {
-                pacienteDatosNuevos.setId(id);
-                listaPacientes.set(indice, pacienteDatosNuevos);
-                pacienteAActualizar = listaPacientes.get(indice);
-            }
+        if (pacienteAActualizar != null) {
+            pacienteDatosNuevos.setId(id);
+            listaPacientes.set(indice, pacienteDatosNuevos);
+            pacienteAActualizar = listaPacientes.get(indice);
+        }
 
-    return  pacienteAActualizar;
+        return pacienteAActualizar;
     }
 
 
-    public void borrarPaciente (Long id){
+    public void borrarPaciente(Long id) {
         Paciente paciente = buscarPaciente(id);
         int indice = listaPacientes.indexOf(paciente);
         listaPacientes.remove(indice);
     }
 
-    private Paciente buscarPaciente(Long id){
+    private Paciente buscarPaciente(Long id) {
         Paciente paciente = null;
 
         for (int i = 0; i < listaPacientes.size(); i++) {
             paciente = listaPacientes.get(i);
 
             if (id == paciente.getId()) {
-               return paciente;
+                return paciente;
             }
 
         }

@@ -1,8 +1,11 @@
 package com.clinica.clinica_api.controller;
 
+import com.clinica.clinica_api.dtos.SavePacienteDTO;
 import com.clinica.clinica_api.entities.Paciente;
 import com.clinica.clinica_api.services.PacienteService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -33,8 +36,11 @@ public class PacienteController {
     }
 
     @PostMapping("")
-    public Paciente guardarPaciente(@RequestBody Paciente paciente){
-        return pacienteService.guardarPaciente(paciente);
+    public ResponseEntity<Paciente> guardarPaciente(@Valid @RequestBody SavePacienteDTO paciente){
+
+        Paciente pacienteCreado =  pacienteService.guardarPaciente(paciente);
+        return  new ResponseEntity<>(pacienteCreado, HttpStatus.CREATED);
+
     }
 
     @PatchMapping("/{id}")
@@ -51,8 +57,10 @@ public class PacienteController {
     //Se me oye?
 
     @DeleteMapping("/{id}")
-    public void borrarPaciente(@PathVariable Long id){
-         pacienteService.borrarPaciente(id);
+    public ResponseEntity borrarPaciente(@PathVariable Long id){
+
+        pacienteService.borrarPaciente(id);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
 }
